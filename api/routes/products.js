@@ -13,4 +13,3 @@ router.patch("/:productId",  ProductsController.products_update_product);
 router.delete("/:productId", ProductsController.products_delete);
 
 module.exports = router;
-

@@ -1,70 +1,31 @@
 var Product = require("../models/product");
-exports.products_get_all = (req, res, next) => {
+const { Pool, Client } = require('pg');
+var bodyParser = require("body-parser");
 
-Product.find()
-    .select()
-    .exec()
-    .then( docs=>{
-          const response = {
-            count: docs.length,
-            products: docs.map(doc => {
-              return {
-                name: doc.name,
-                brand: doc.brand,
-                barcode: doc.barcode,
-                price: doc.price,
-                productImage: doc.productImage,
-                _id: doc._id,
-                request: {
-                  type: "GET",
-                  url: "http://localhost:3002/products/" + doc._id
-                }
-              };
-            })
-          };
-      res.status(200).json(response);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });
+exports.products_get_all = (req, res, next) => {
+  
+  const client = new Client({
+    user: 'uktrtdoklswema',
+    host: 'ec2-99-81-238-134.eu-west-1.compute.amazonaws.com',
+    database: 'd56vth083636vl',
+    password: '2c174b8522aa6c46fbfe4668014e383c1fbce0f706e7cd2d3e3b7dabac6d653e',
+    port: 5432,
+    ssl: {rejectUnauthorized: false}
+  })
+  client.connect()
+  
+  client
+      .query('SELECT * FROM "Products"."Products"')
+      .then(res => console.log(res.rows))
+      .catch(e => console.error(e.stack))
+
 };
 
 exports.products_create_product = (req, res, next) => {
-  const product = new Product({
-    _id: req.body.ID,
-    name: req.body.name,
-    brand: req.body.brand,
-    barcode: req.body.barcode,
-    price: req.body.price,
-  });
-  product
-    .save()
-    .then(result => {
-      console.log(result);
-      res.status(201).json({
-        message: "Created product successfully",
-        createdProduct: {
-          name: result.name,
-          brand: result.brand,
-          barcode: result.barcode,
-          price: result.price,
-          _id: result._id,
-          request: {
-            type: "GET",
-            url: "http://localhost:3002/products/" + result._id
-          }
-        }
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });
+  
+  const id = req.params.productId;
+
+
 };
 
 exports.products_update_product = (req, res, next) => {
@@ -140,6 +101,3 @@ exports.catalog_get_product_barcode = (req, res, next) => {
       res.status(500).json({ error: err });
     });
 };
-
-
-
