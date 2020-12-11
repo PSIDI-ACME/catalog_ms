@@ -1,0 +1,239 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Catalog Service",
+    "description" : "This is a simple API",
+    "contact" : {
+      "email" : "1141417@isep.ipp.pt"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://acme.reviews.com/v1"
+    "description" : "Development server"
+  } ],
+  "tags" : [ {
+    "name" : "products",
+    "description" : "Handles the Catalog service requests"
+  }],
+  "paths" : {
+    "/products" : {
+      "get" : {
+        "tags" : [ "products" ],
+        "summary" : "Returns all of the Products list from the Catalog, where each product includes the description of name and barcode",
+        "description" : "",
+        "operationId": "getProducts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Product Name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "Barcode",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products Fetched. Returns a Pagination Object, which contains a list with productIds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagination"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagination"
+                }
+              }
+            },
+            "links": {
+              "GetProductsById": {
+                "operationId": "getProduct",
+                "parameters": {
+                  "productId": "$response.body#/products/productId",
+                  "required": true,
+                  "description": ""
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Request"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Get a Product By Id",
+        "description": "Returns a certain product according to an id that the API user inserts",
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product Obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Request"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "deprecated": false
+      }
+    },
+  "components" : {
+    "schemas" : {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "avgRating": {
+            "type": "number"
+          },
+          "barcode": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductBarcode"
+              }
+            ]
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "xml": {
+          "name": "Product"
+        }
+      },
+      "ProductBarcode": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "sku": {
+            "type": "number"
+          }
+        },
+        "xml": {
+          "name": "ProductBarcode"
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "previous": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          },
+          "listOfURIs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "xml": {
+          "name": "Pagination"
+        }
+      }
+    }
+  },
+  "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://example.com/oauth/authorize",
+            "tokenUrl": "https://example.com/oauth/token",
+            "scopes": {
+              "customer_read": "Grants customers read access",
+              "customer_write": "Grants customers write access",
+              "moderator": "Grants access to moderator operations"
+            }
+          }
+        }
+      }
+    }
+}
