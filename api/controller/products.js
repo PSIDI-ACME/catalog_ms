@@ -1,5 +1,6 @@
 // var Product = require("../models/product");
 const client = require("./dbConnect");
+const url = require('url');
 
 //Summons all Products from database:
 exports.products_get_all = (req, res, next) => {
@@ -25,7 +26,10 @@ exports.products_update_product = (req, res, next) => {
   console.log("Este pedido PATCH está a dar!");
   
   var id= req.params.productId;
-  var review= req.params.review;
+  // var review= req.params.review;
+
+  const queryObject = url.parse(req.url, true).query;
+  const review = queryObject.review;
 
   client
       .query('UPDATE "Products"."Products" SET "Reviews"=$1 WHERE "productId"='+id,[review])

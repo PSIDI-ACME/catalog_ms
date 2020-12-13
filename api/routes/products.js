@@ -6,7 +6,7 @@ router.get("/",ProductsController.products_get_all);
 
 router.get("/:productId", ProductsController.products_get_product_by_id);
 
-router.patch("/:productId/:review",ProductsController.products_update_product);
+router.patch("/:productId",ProductsController.products_update_product);
 
 /*
 router.post("/", ProductsController.products_create_product);
