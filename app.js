@@ -5,7 +5,7 @@ const productRoutes = require("./api/routes/products");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use("/product", productRoutes);
+app.use("/products", productRoutes);
 app.use((req, res, next) => {
   const error = new Error("Not Found")
   error.status = 404;
