@@ -1,0 +1,35 @@
+{
+  "name": "Psidi",
+  "version": "1.0.0",
+  "description": "* Rui Ricardo Lopes Gomes\r * Número Mecanográfico: 1141417\r * Ano Letivo:2020/2021",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-promise-router": "^4.0.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.6",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "require": "^2.4.20",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PSIDI-ACME/catalog_ms.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PSIDI-ACME/catalog_ms/issues"
+  },
+  "homepage": "https://github.com/PSIDI-ACME/catalog_ms#readme"
+}

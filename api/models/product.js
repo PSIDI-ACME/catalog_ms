@@ -1,10 +1,10 @@
-//item de produto
+// Item de Produto
 
 const productSchema = Schema({
-    _id: { type: ObjectId, required: true },
-    name: { type: String, required: true },
-    brand: { type: String, required: true },
-    barcode: { type: Number, required: true },
+    id: { type: ObjectId, required: true },
+    productName: { type: String, required: true },
+    productBrand: { type: String, required: true },
+    productBarcode: { type: Number, required: true },
     price: { type: Number, required: true }
 });
 
