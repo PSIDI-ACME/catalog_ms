@@ -15,9 +15,10 @@ exports.products_get_product_by_id = (req, res, next) => {
   var id= req.params.productId;
   console.log("Este pedido GET está a dar!");
   client
-      .query('SELECT * FROM "Products"."Products" WHERE id = '+id)
+      .query('SELECT * FROM "Products"."Products" WHERE "productId" = '+id)
         .then(docs =>res.status(200).json(docs.rows))
         .catch(e => console.error(e.stack))
+        
 }
 
 
