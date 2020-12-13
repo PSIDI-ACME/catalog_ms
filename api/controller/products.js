@@ -1,4 +1,3 @@
-// var Product = require("../models/product");
 const client = require("./dbConnect");
 const url = require('url');
 
@@ -21,24 +20,32 @@ exports.products_get_product_by_id = (req, res, next) => {
         .catch(e => console.error(e.stack))
         
 }
+
 exports.products_update_product = (req, res, next) => {
 
   console.log("Este pedido PATCH está a dar!");
   
   var id= req.params.productId;
-  // var review= req.params.review;
-
   const queryObject = url.parse(req.url, true).query;
   const review = queryObject.review;
 
   client
-      .query('UPDATE "Products"."Products" SET "Reviews"=$1 WHERE "productId"='+id,[review])
-        .then(docs =>res.status(200).json(docs.rows))
-        .catch(e => console.error(e.stack))
+  .query('SELECT "Reviews" FROM "Products"."Products" WHERE "productId" = '+id)
+  .then(docs => updateReview(docs.rows,review))// res.status(200).json(docs.rows))
+  .catch(e => console.error(e.stack))
+        function updateReview(reviews,review){
+          reviews =JSON.stringify(reviews)
+          reviews = reviews.replace(/\s/g, '');
+          var obj=JSON.parse(reviews);
+          obj.push({"Reviews":review});
 
+        client
+          .query('UPDATE "Products"."Products" SET "Reviews"=$1 WHERE "productId"='+id,[obj])
+          .then(docs =>res.status(200).json(docs.rows))
+          .catch(e => console.error(e.stack))
+
+        }    
 }
-
-
 
 /* 
 exports.products_create_product=(req,res,next)=>{
