@@ -4,8 +4,31 @@ const url = require('url');
 //Summons all Products from database:
 exports.products_get_all = (req, res, next) => {
   console.log("Este pedido GET está a dar!");
+
+  var baseQuery ='SELECT * FROM "Products"."Products" ';
+  var nameQuery = '';
+  var barcodeQuery ='';
+
+  var sortQuery='ORDER BY "productId"';
+
+  if ((req.query.productBarcode != '' && req.query.productBarcode!= undefined) || (req.query.productName !='' && req.query.productName!= undefined)) {
+    baseQuery += "WHERE ";
+  }
+  
+  if (req.query.productBarcode != '' && req.query.productBarcode!= undefined){
+    barcodeQuery = '"productBarcode" = \'' + req.query.productBarcode+'\' ';
+    if(req.query.productName !='' && req.query.productName!= undefined){
+      nameQuery = 'AND "productName" = \'' + req.query.productName+'\' ';
+    }
+  }else if (req.query.productName !='' && req.query.productName!= undefined){
+    nameQuery = '"productName" = \'' + req.query.productName+'\' ';
+  }
+
+  var finalQuery = baseQuery + barcodeQuery + nameQuery+ sortQuery;
+console.log(finalQuery);
+
 client
-    .query('SELECT * FROM "Products"."Products"')
+    .query(finalQuery)
     .then(docs =>res.status(200).json(docs.rows))
     .catch(e => console.error(e.stack))
 };
@@ -16,28 +39,6 @@ exports.products_get_product_by_id = (req, res, next) => {
   console.log("Este pedido GET está a dar!");
   client
       .query('SELECT * FROM "Products"."Products" WHERE "productId" = '+id)
-        .then(docs =>res.status(200).json(docs.rows))
-        .catch(e => console.error(e.stack))
-        
-}
-
-exports.products_get_product_by_name = (req, res, next) => {
-
-  var name= req.params.productName;
-  console.log("Este pedido GET está a dar!");
-  client
-      .query('SELECT * FROM "Products"."Products" WHERE "productName" = '+name)
-        .then(docs =>res.status(200).json(docs.rows))
-        .catch(e => console.error(e.stack))
-        
-}
-
-exports.products_get_product_by_barcode = (req, res, next) => {
-
-  var barCode= req.params.productBarcode;
-  console.log("Este pedido GET está a dar!");
-  client
-      .query('SELECT * FROM "Products"."Products" WHERE "productBarcode" = '+barCode)
         .then(docs =>res.status(200).json(docs.rows))
         .catch(e => console.error(e.stack))
         
