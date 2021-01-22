@@ -1,0 +1,51 @@
+// ----------------- Hypermedia 1 ----------------- //
+
+// Report a Review
+// GET request
+
+GET http://localhost:3000/products/{:reviewId}/report
+
+{
+    "_links": {
+        "self": { "href": "http://reviews-psidi.herokuapp.com/v1/reviews/{?id}/report" },
+        "review":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?id}"},
+        "customer":{"href":"http://psidi-customers.herokuapp.com/v1/customers/{?id}"},
+        "product":{"href":"http://product-psidi.herokuapp.com/v1/product/{?id}"},
+        "accepted":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?id}/accepted"},
+        "rejected":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?id}/rejected"},
+    }
+}
+
+
+// ----------------- Hypermedia 2 ----------------- //
+
+// Vote for a Review
+// GET request
+
+GET http://localhost:3000/reviews/:reviewId/vote
+
+{
+    "_links": {
+        "self": { "href": "http://reviews-psidi.herokuapp.com/v1/reviews/reviewId/vote" },
+        "review":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?id}"},
+        "customer":{"href":"http://psidi-customers.herokuapp.com/v1/customers/{?id}"},
+    }
+    "submission":accepted
+}
+
+// ----------------- Hypermedia 3 ----------------- //
+
+// Get Product Rating
+// GET request
+
+GET http://localhost:3000/products/{:Id}/rating
+
+{
+    "_links": {
+        "self": { "href": "http://localhost:3000/products/{:Id}/rating" },
+        "product":{"href":"http://product-psidi.herokuapp.com/v1/products/{?id}"},
+        "reviews":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?productId}"}
+    
+    }
+    "ratingValue":12
+}
