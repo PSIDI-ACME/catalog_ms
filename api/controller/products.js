@@ -1,5 +1,7 @@
 const client = require("./dbConnect");
 const url = require('url');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 
 //Summons all Products from database:
 exports.products_get_all = (req, res, next) => {
@@ -47,15 +49,30 @@ exports.products_get_product_by_id = (req, res, next) => {
 
 exports.products_rating_product=(req,res,next) =>{
   var id= req.params.productId;
-  var productRating= req.params.productRating;
+  var rating= req.params.productRating;
+  var postUrl = 'http://reviews-psidi.herokuapp.com/reviews?productId='+id;
+  var xhttp = new XMLHttpRequest();
 
-  console.log("Este pedido GET está a dar!");
+  xhttp.onreadystatechange = function () {  
+  if (this.readyState === 4 && this.status === 200) {
+    console.log("Este pedido GET está a dar!");    }
+  }
+  xhttp.open('GET',postUrl, true);
+  xmlhttp.send();
 
+  function myFunction(arr) {
+    var out = "";
+    var i;
+    for(i = 0; i < arr.length; i++) {
+      main(arr[i].score);
+  }
+}
+
+  var productRating = myFunction(rating);
   client
-      .query('SELECT "productId" = '+id+' , "productRating" = '+productRating+' FROM "productId" = '+id)
-        .then(docs =>res.status(200).json(docs.rows))
-        .catch(e => console.error(e.stack))
-        
+    .query('SELECT "Products" FROM "Products"."Products" WHERE "productId" = '+id)
+    .then(docs =>res.status(200).json(docs.rows))
+    .catch(e => console.error(e.stack))
 }
 
 /* 
