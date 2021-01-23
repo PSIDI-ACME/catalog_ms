@@ -8,6 +8,8 @@ router.get("/:productId", ProductsController.products_get_product_by_id);
 
 router.get("/:productId/productRating",ProductsController.products_rating_product);
 
+router.get("/score/refresh",ProductsController.products_score_update);
+
 
 /*
 router.post("/:productId",ProductsController.products_update_product);

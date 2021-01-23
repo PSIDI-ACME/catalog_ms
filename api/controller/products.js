@@ -56,7 +56,9 @@ exports.products_rating_product=(req,res,next) =>{
   xhttp.open('GET',postUrl, true);
   xhttp.onreadystatechange = function () {  
   if (this.readyState === 4 && this.status === 200) {
-    console.log(JSON.parse(xhttp.responseText));    }
+  var docs= JSON.parse(xhttp.responseText);    
+  console.log(docs._embedded.reviews);
+    }
   }
   xhttp.send();
 
@@ -71,6 +73,14 @@ exports.products_rating_product=(req,res,next) =>{
     .query('SELECT "Products" FROM "Products"."Products" WHERE "productId" = '+id)
     .then(docs =>res.status(200).json(docs.rows))
     .catch(e => console.error(e.stack))
+}
+
+
+exports.products_score_update=(req,res,next)=>{
+
+res.status(200).json('abc');
+
+
 }
 
 /* 
