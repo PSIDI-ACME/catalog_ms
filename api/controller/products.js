@@ -67,7 +67,6 @@ exports.products_rating_product=(req,res,next) =>{
       main(arr[i].score);
   }
 }
-
   var productRating = myFunction(rating);
   client
     .query('SELECT "Products" FROM "Products"."Products" WHERE "productId" = '+id)
