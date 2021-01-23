@@ -1,40 +1,5 @@
 // ----------------- Hypermedia 1 ----------------- //
 
-// Report a Review
-// GET request
-
-GET http://localhost:3000/products/{:reviewId}/report
-
-{
-    "_links": {
-        "self": { "href": "http://reviews-psidi.herokuapp.com/v1/reviews/{?id}/report" },
-        "review":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?id}"},
-        "customer":{"href":"http://psidi-customers.herokuapp.com/v1/customers/{?id}"},
-        "product":{"href":"http://product-psidi.herokuapp.com/v1/product/{?id}"},
-        "accepted":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?id}/accepted"},
-        "rejected":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?id}/rejected"},
-    }
-}
-
-
-// ----------------- Hypermedia 2 ----------------- //
-
-// Vote for a Review
-// GET request
-
-GET http://localhost:3000/reviews/:reviewId/vote
-
-{
-    "_links": {
-        "self": { "href": "http://reviews-psidi.herokuapp.com/v1/reviews/reviewId/vote" },
-        "review":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?id}"},
-        "customer":{"href":"http://psidi-customers.herokuapp.com/v1/customers/{?id}"},
-    }
-    "submission":accepted
-}
-
-// ----------------- Hypermedia 3 ----------------- //
-
 // Get Product Rating
 // GET request
 
@@ -43,9 +8,83 @@ GET http://localhost:3000/products/{:Id}/rating
 {
     "_links": {
         "self": { "href": "http://localhost:3000/products/{:Id}/rating" },
+    },
+    "_embedded": {
+        "reviews": {
+                "_links": {
+                    "self": { "href": "http://reviews-psidi.herokuapp.com/v1/reviews/{?productId}" }
+                }
+            },
+        "product":{"href":"http://product-psidi.herokuapp.com/v1/products/{?id}"},
+        "rating": {
+                "_links": {
+                    "self": { "href": "http:/catalog-psidi.herokuapp.com/v1/reviews?productId={?id}/rating" }
+                },
+    "productRating": "integer",
+            },
+        },
+        "productName": "string",
+        "productBrand": "string", 
+        "price": "number",
+        "productBarcode": "number" 
+}
+
+
+// ----------------- Hypermedia 2 ----------------- //
+
+// Get Catalog of Products
+// GET request
+
+GET http://catalog-psidi.herokuapp.com/v1/products
+{
+    "_links": {
+        "self": { "href": "http://catalog-psidi.herokuapp.com/v1/products" },
+        "next": { "href": "http://catalog-psidi.herokuapp.com/v1/products?page=2" },
+        "start": { "href": "http://catalog-psidi.herokuapp.com/v1/products?page=1" },
+        "previous": { "href": "http://catalog-psidi.herokuapp.com/v1/products?page=1" },
+        "last": { "href": "http://catalog-psidi.herokuapp.com/v1/products?page=%7B?lastPage%7D" },
+        "find": { "href": " http://catalog-psidi.herokuapp.com/v1/products/%7B:id%7D" },
+        "items": { "href": "/products/1", "href": "/products/2", "href": "/products/3", "href":  "/products/4", "/products/5"  }
+},
+"totalNumberOfResults": "integer",
+"_embedded": {
+        "products": [ {
+                "_links": {
+                    "self": { "href": "/products/1" },
+        "rating": { "href": "/products/1/rating" },
+},
+"productName": "string",
+            "productDescription": "string", 
+            "price": "number",
+            "productBarcode": "number",
+                "_links": {
+                        "self": { "href": "/products/2" },
+                        "rating": { "href": "/products/2/rating" },
+},
+    "productName": "string",
+    "productName ": "string", 
+    "price": "number",
+    "productBarcode": "number",
+}
+]
+}
+}
+
+// ----------------- Hypermedia 3 ----------------- //
+
+// Get Product by Id
+// GET request
+
+GET http://localhost:3000/products/{:Id}
+
+{
+    "_links": {
+        "self": { "href": "http://localhost:3000/products/{:Id}/rating" },
         "product":{"href":"http://product-psidi.herokuapp.com/v1/products/{?id}"},
         "reviews":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?productId}"}
-    
-    }
-    "ratingValue":12
+    },
+    "productName": "string",
+    "productName ": "string", 
+    "price": "number",
+    "productBarcode": "number"
 }

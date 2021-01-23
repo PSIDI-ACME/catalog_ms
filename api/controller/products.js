@@ -33,6 +33,8 @@ client
     .catch(e => console.error(e.stack))
 };
 
+
+
 exports.products_get_product_by_id = (req, res, next) => {
 
   var id= req.params.productId;
@@ -41,10 +43,20 @@ exports.products_get_product_by_id = (req, res, next) => {
       .query('SELECT * FROM "Products"."Products" WHERE "productId" = '+id)
         .then(docs =>res.status(200).json(docs.rows))
         .catch(e => console.error(e.stack))
-        
 }
 
+exports.products_rating_product=(req,res,next) =>{
+  var id= req.params.productId;
+  var productRating= req.params.productRating;
 
+  console.log("Este pedido GET está a dar!");
+
+  client
+      .query('SELECT "productId" = '+id+' , "productRating" = '+productRating+' FROM "productId" = '+id)
+        .then(docs =>res.status(200).json(docs.rows))
+        .catch(e => console.error(e.stack))
+        
+}
 
 /* 
 exports.products_update_product = (req, res, next) => {

@@ -6,6 +6,7 @@ const productSchema = Schema({
     productBrand: { type: String, required: true },
     productBarcode: { type: Number, required: true },
     price: { type: Number, required: true },
+    productRating: { type: Number, required: true },
     review: { type: String, required: true }
 });
 
