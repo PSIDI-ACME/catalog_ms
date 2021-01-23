@@ -50,24 +50,23 @@ exports.products_get_product_by_id = (req, res, next) => {
 exports.products_rating_product=(req,res,next) =>{
   var id= req.params.productId;
   var rating= req.params.productRating;
+  console.log(rating);
   var postUrl = 'http://reviews-psidi.herokuapp.com/reviews?productId='+id;
   var xhttp = new XMLHttpRequest();
-
+  xhttp.open('GET',postUrl, true);
   xhttp.onreadystatechange = function () {  
   if (this.readyState === 4 && this.status === 200) {
-    console.log("Este pedido GET está a dar!");    }
+    console.log(JSON.parse(xhttp.responseText));    }
   }
-  xhttp.open('GET',postUrl, true);
-  xmlhttp.send();
+  xhttp.send();
 
   function myFunction(arr) {
-    var out = "";
     var i;
     for(i = 0; i < arr.length; i++) {
       main(arr[i].score);
   }
 }
-  var productRating = myFunction(rating);
+  // var productRating = myFunction(rating);
   client
     .query('SELECT "Products" FROM "Products"."Products" WHERE "productId" = '+id)
     .then(docs =>res.status(200).json(docs.rows))

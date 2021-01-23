@@ -6,7 +6,7 @@ router.get("/",ProductsController.products_get_all);
 
 router.get("/:productId", ProductsController.products_get_product_by_id);
 
-router.get("/productId/productRating",ProductsController.products_rating_product);
+router.get("/:productId/productRating",ProductsController.products_rating_product);
 
 
 /*
