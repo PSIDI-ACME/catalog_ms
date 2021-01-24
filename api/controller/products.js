@@ -100,7 +100,7 @@ exports.products_get_all = (req, res, next) => {
 
 // Obtains a specific Product from database, by the id of the Product:
 exports.products_get_product_by_id = (req, res, next) => {
-	var id = req.params.productId;
+	var productId = req.params.productId;
   var links = new Object;
   var embedded = new Object;
 
