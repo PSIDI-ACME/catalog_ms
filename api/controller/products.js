@@ -108,6 +108,11 @@ exports.products_get_product_by_id = (req, res, next) => {
   if(productId != undefined){
 
     links.self=new Object;
+    links.start=new Object;
+    links.product=new Object;
+    links.reviews=new Object;
+    links.find=new Object;
+    links.item=new Object;
 
     links.self.href="http://catalog-psidi.herokuapp.com/products?productId="+ productId;
     links.start.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=1";
@@ -184,6 +189,8 @@ exports.products_rating_product = (req, res, next) => {
   if(productId != undefined){
 
     links.self=new Object;
+    links.product=new Object;
+
     links.self.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId +"?rating="+ productRating;
     links.product.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=1";
     }
