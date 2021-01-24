@@ -184,7 +184,6 @@ exports.products_rating_product = (req, res, next) => {
   if(productId != undefined){
 
     links.self=new Object;
-http://catalog-psidi.herokuapp.com/products/{:Id}/rating
     links.self.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId +"?rating="+ productRating;
     links.product.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=1";
     }
