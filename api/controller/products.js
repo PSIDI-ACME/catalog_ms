@@ -124,7 +124,7 @@ exports.products_get_product_by_id = (req, res, next) => {
 
 
 	client
-		.query('SELECT * FROM "Products"."Products" WHERE "productId" = ' + id)
+		.query('SELECT * FROM "Products"."Products" WHERE "productId" = ' + productId)
 		.then((docs) => {
       docs.rows.sort(function(a, b) {
       return (a.publishingdate < b.publishingdate) ? -1 : ((a.publishingdate > b.publishingdate) ? 1 : 0);
@@ -196,7 +196,7 @@ exports.products_rating_product = (req, res, next) => {
     }
 
   client
-    .query('SELECT * FROM "Products"."Products" WHERE "productId" = ' + id)
+    .query('SELECT * FROM "Products"."Products" WHERE "productId" = ' + productId)
     .then((docs) =>{
  docs.rows.sort(function(a, b) {
       return (a.publishingdate < b.publishingdate) ? -1 : ((a.publishingdate > b.publishingdate) ? 1 : 0);
