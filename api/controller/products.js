@@ -70,14 +70,17 @@ exports.products_score_update = (req, res, next) => {
 		.query('SELECT * FROM "Products"."Products" WHERE "productId" = ' + productId)
 		.then((docs) => {
 			if (docs.rows[0].nr_Reviews == 0) {
+        console.log("entrei 1");
         client
         .query('UPDATE "Products"."Products"  SET "productRating" = $2 , "nr_Reviews" = $3 WHERE "productId" = $1',[productId,score,1])
         .then(docs => res.status(200).json('score received'))
         .catch(e => console.error(e.stack))
 			}else{
+      console.log("entrei 2");
       var tempScore= docs.rows[0].productRating* docs.rows[0].nr_Votes;
       var tempReviews=docs.rows[0].nr_Votes+1;
       score = (score + tempScore)/tempReviews;
+
         client
         .query('UPDATE "Products"."Products"  SET "productRating" = $2 , "nr_Reviews" = $3 WHERE "productId" = $1',[productId,score,tempReviews])
         .then(docs => res.status(200).json('Score received'))
