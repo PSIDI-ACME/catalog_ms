@@ -131,6 +131,7 @@ exports.products_get_product_by_id = (req, res, next) => {
       });
     var items = [];
     var products = [];
+    var rating = [];
     for (i = 0; i < docs.rows.length; i++) {
         var links_temp = new Object;
         var itemref = new Object;
