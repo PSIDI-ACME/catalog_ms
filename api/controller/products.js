@@ -63,32 +63,32 @@ exports.products_rating_product = (req, res, next) => {
 
 // Updates the score of the Reviews:
 exports.products_score_update = (req, res, next) => {
-  const score = req.params.score;
-  console.log(score);
-	const productId = req.params.productId;
-  console.log(productId);
+
+  const queryObject = url.parse(req.url, true).query;
+  var productId = parseInt(queryObject.productId);
+  var score = parseInt(queryObject.score);
+
 
 	client
 		.query('SELECT * FROM "Products"."Products" WHERE "productId" = ' + productId)
 		.then((docs) => {
-		/*	if (docs.rows[0].nr_Reviews == 0) {
+	if (docs.rows[0].nr_Reviews == 0) {
         console.log("entrei 1");
         client
         .query('UPDATE "Products"."Products"  SET "productRating" = $2, "nr_Reviews" = $3 WHERE "productId" = $1',[productId,score,1])
         .then(docs => res.status(200).json(docs.rows))
-        .catch(e => console.error(e.stack)) */
-//		}else{
+        .catch(e => console.error(e.stack)) 
+	}else{
       console.log("entrei 2");
-      var tempScore= docs.rows[0].productRating* docs.rows[0].nr_Votes;
-      var tempReviews=docs.rows[0].nr_Votes+1;
+      var tempScore= docs.rows[0].productRating* docs.rows[0].nr_Reviews;
+      var tempReviews=docs.rows[0].nr_Reviews+1;
       score = (score + tempScore)/tempReviews;
 
         client
         .query('UPDATE "Products"."Products"  SET "productRating" = $2, "nr_Reviews" = $3 WHERE "productId" = $1',[productId,score,tempReviews])
         .then(docs => res.status(200).json(docs.rows))
         .catch(e => console.error(e.stack))
-    //  }
-
+  }
 			var result = docs.rows[0].productRating + score;
 		})
 		.catch((e) => console.error(e.stack));
