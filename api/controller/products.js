@@ -71,7 +71,7 @@ exports.products_score_update = (req, res, next) => {
 		.then((docs) => {
 			if (docs.rows[0].nr_Reviews == 0) {
         client
-        .query('UPDATE "Products"."Products" WHERE "productId" = ' + productId + 'SET productRating = ' + score + ', nr_Votes = '+ 1)
+        .query('UPDATE "Products"."Products" WHERE "productId" = ' + productId + 'SET "productRating" = ' + score + ', "nr_Votes" = '+ 1)
         .then(docs => res.status(200).json('score received'))
         .catch(e => console.error(e.stack))
 			}else{
@@ -79,7 +79,7 @@ exports.products_score_update = (req, res, next) => {
       var tempVotes=docs.rows[0].nr_Votes+1;
       score = (score + tempScore)/tempVotes;
         client
-        .query('UPDATE "Products"."Products" WHERE "productId" = ' + productId + 'SET productRating = ' + score + ', nr_Votes = '+tempVotes)
+        .query('UPDATE "Products"."Products" WHERE "productId" = ' + productId + 'SET "productRating" = ' + score + ', "nr_Votes" = '+tempVotes)
         .then(docs => res.status(200).json('Score received'))
         .catch(e => console.error(e.stack))
       }
