@@ -13,9 +13,7 @@ router.get("/score/refresh",ProductsController.products_score_update);
 
 /*
 router.post("/:productId",ProductsController.products_update_product);
-
 router.post("/", ProductsController.products_create_product);
-
 router.delete("/:productId", ProductsController.products_delete);
 */
 module.exports = router;

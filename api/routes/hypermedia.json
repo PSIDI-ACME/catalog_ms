@@ -43,8 +43,8 @@ GET http://catalog-psidi.herokuapp.com/v1/products
         "start": { "href": "http://catalog-psidi.herokuapp.com/v1/products?page=1" },
         "previous": { "href": "http://catalog-psidi.herokuapp.com/v1/products?page=1" },
         "last": { "href": "http://catalog-psidi.herokuapp.com/v1/products?page=%7B?lastPage%7D" },
-        "find": { "href": " http://catalog-psidi.herokuapp.com/v1/products/%7B:id%7D" },
-        "items": { "href": "/products/1", "href": "/products/2", "href": "/products/3", "href":  "/products/4", "/products/5"  }
+        "find": { "href": "http://catalog-psidi.herokuapp.com/v1/products/%7B:id%7D" },
+        "items": { "href": "/products/1", "href": "/products/2", "href": "/products/3", "href":  "/products/4", "href":"/products/5"  }
 },
 "totalNumberOfResults": "integer",
 "_embedded": {
@@ -62,9 +62,10 @@ GET http://catalog-psidi.herokuapp.com/v1/products
                         "rating": { "href": "/products/2/rating" },
 },
     "productName": "string",
-    "productName ": "string", 
+    "productBrand ": "string", 
     "price": "number",
     "productBarcode": "number",
+    "productRating": "number",
 }
 ]
 }
@@ -79,7 +80,7 @@ GET http://localhost:3000/products/{:Id}
 
 {
     "_links": {
-        "self": { "href": "http://localhost:3000/products/{:Id}/rating" },
+        "self": { "href": "http://localhost:3000/products/{:Id}" },
         "product":{"href":"http://product-psidi.herokuapp.com/v1/products/{?id}"},
         "reviews":{"href":"http://reviews-psidi.herokuapp.com/v1/reviews/{?productId}"}
     },
