@@ -2,7 +2,7 @@ const client = require('./dbConnect');
 const url = require('url');
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const { linkSync } = require('fs');
-
+// qwerty
 // Obtains all Products from database:
 exports.products_get_all = (req, res, next) => {
 
