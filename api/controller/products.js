@@ -178,7 +178,7 @@ exports.products_get_product_by_id = (req, res, next) => {
 
 // Obtains the rating of a Product:
 exports.products_rating_product = (req, res, next) => {
-	var id = req.params.productId;
+	var productId = req.params.productId;
   var embedded = new Object;
 
   if(productId != undefined){
