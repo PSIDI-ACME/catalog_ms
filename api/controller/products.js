@@ -12,6 +12,7 @@ exports.products_get_all = (req, res, next) => {
 	var sortQuery = 'ORDER BY "productId"';
   var links = new Object;
   var embedded = new Object;
+	var productId = req.params.productId;
 
 
   if(productId != undefined){
