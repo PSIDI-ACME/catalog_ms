@@ -159,7 +159,7 @@ exports.products_get_product_by_id = (req, res, next) => {
     }
     links.items = items;
     var size = docs.rows.length;
-    embedded.reviews = reviews;
+    embedded.products = products;
     embedded.rating = rating;
     res.status(200).json({
     "_links": links,
