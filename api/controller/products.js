@@ -73,7 +73,7 @@ exports.products_score_update = (req, res, next) => {
         console.log("entrei 1");
         client
         .query('UPDATE "Products"."Products"  SET "productRating" = $2, "nr_Reviews" = $3 WHERE "productId" = $1',[productId,score,1])
-        .then(docs => res.status(200).json('score received'))
+        .then(docs => res.status(200).json(docs.rows))
         .catch(e => console.error(e.stack))
 			}else{
       console.log("entrei 2");
@@ -83,7 +83,7 @@ exports.products_score_update = (req, res, next) => {
 
         client
         .query('UPDATE "Products"."Products"  SET "productRating" = $2, "nr_Reviews" = $3 WHERE "productId" = $1',[productId,score,tempReviews])
-        .then(docs => res.status(200).json('Score received'))
+        .then(docs => res.status(200).json(docs.rows))
         .catch(e => console.error(e.stack))
       }
 
