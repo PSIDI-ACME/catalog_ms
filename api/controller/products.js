@@ -2,7 +2,8 @@ const client = require('./dbConnect');
 const url = require('url');
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const { linkSync } = require('fs');
-// qwerty
+
+
 // Obtains all Products from database:
 exports.products_get_all = (req, res, next) => {
 
@@ -13,27 +14,14 @@ exports.products_get_all = (req, res, next) => {
   var links = new Object;
   var embedded = new Object;
 	var productId = req.params.productId;
-
-
-  if(productId != undefined){
+	var rating = req.params.productRating;
 
     links.self=new Object;
-    links.next=new Object;
-    links.start=new Object;
-    links.previous=new Object;
-    links.last=new Object;
     links.find=new Object;
-    links.item=new Object;
-    links.self.href="http://catalog-psidi.herokuapp.com/v1/products";
-    links.next.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=2";
-    links.start.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=1";
-    links.previous.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=1";
-    links.last.href="http://catalog-psidi.herokuapp.com/products?page=%7B?lastPage%7D";
-    links.find.href="http://catalog-psidi.herokuapp.com/products/%7B:id%7D";
-    links.item.href="/products?productId=" + productId + "&page=1", href="/products?productId=" + productId + "&page=2", href="/products?productId=" + productId + "&page=3", href= "/products?productId=" + productId + "&page=4", href="/products?productId=" + productId + "&page=5";
-    }
+    links.self.href="http://catalog-psidi.herokuapp.com/products";
+    links.find.href="http://catalog-psidi.herokuapp.com/products/{:Id}";
     
-	if (
+	if(
 		(req.query.productBarcode != '' && req.query.productBarcode != undefined) ||
 		(req.query.productName != '' && req.query.productName != undefined)
 	) {
@@ -58,32 +46,28 @@ exports.products_get_all = (req, res, next) => {
       return (a.publishingdate < b.publishingdate) ? -1 : ((a.publishingdate > b.publishingdate) ? 1 : 0);
       });
       var items = [];
-      var reviews = [];
+      var products = [];
+
       for (i = 0; i < docs.rows.length; i++) {
         var links_temp = new Object;
         var itemref = new Object;
-        itemref.href="http://catalog-psidi.herokuapp.com/products" + docs.rows[i].id;
+        var _links=[];
+
+        itemref.href="http://catalog-psidi.herokuapp.com/products/" + docs.rows[i].productId;
         items.push(itemref)
 
         links_temp.self = new Object;
-        links_temp.product = new Object;
-        links_temp.productName = new Object;
-        links_temp.productDescription = new Object;
-        links_temp.productBrand = new Object;
-        links_temp.productBarcode = new Object;
-        links_temp.price = new Object;
-        links_temp.productRating = new Object;
-        links_temp.nr_Reviews= new Object;
+        links_temp.reviews = new Object;
+        links_temp.rating = new Object;
 
-        links_temp.self.href = "http://catalog-psidi.herokuapp.com/products/1";
-        links_temp.product.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].objectid;
-        links_temp.productName.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productName;
-        links_temp.productBrand.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productBrand;
-        links_temp.productBarcode.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productBarcode;
-        links_temp.price.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].price;
-        links_temp.productRating.href = "http://catalog-psidi.herokuapp.com/product/1" + docs.rows[i].productRating;
-        links_temp.nr_Reviews.href= "http://catalog-psidi.herokuapp.com/product/1" + docs.rows[i].nr_Reviews;
-        products.push(links_temp);
+        links_temp.self.href = "http://catalog-psidi.herokuapp.com/products/"+docs.rows[i].productId;
+        links_temp.reviews.href ="https://reviews-psidi.herokuapp.com/reviews?productId=" +docs.rows[i].productId;
+        links_temp.rating.href = "http://catalog-psidi.herokuapp.com/products/"+docs.rows[i].productId+"/rating";
+
+
+        _links.push(links_temp);
+        products[i]=new Object;
+        products[i]._links=_links;
       }
       links.items = items;
       var size = docs.rows.length;
@@ -99,73 +83,51 @@ exports.products_get_all = (req, res, next) => {
 };
 
 
+
 // Obtains a specific Product from database, by the id of the Product:
 exports.products_get_product_by_id = (req, res, next) => {
 	var productId = req.params.productId;
   var links = new Object;
   var embedded = new Object;
 
-  if(productId != undefined){
 
     links.self=new Object;
-    links.start=new Object;
-    links.product=new Object;
-    links.reviews=new Object;
-    links.find=new Object;
-    links.item=new Object;
 
-    links.self.href="http://catalog-psidi.herokuapp.com/products?productId="+ productId;
-    links.start.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=1";
-    links.product.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=1";
-    links.reviews.href="http://catalog-psidi.herokuapp.com/products?page=%7B?lastPage%7D";
-    links.find.href="http://catalog-psidi.herokuapp.com/products/%7B:id%7D";
-    links.item.href="/products/1", href= "/products/2", href="/products/3", href= "/products/4", href="/products/5";
-    }
-
-
+    links.self.href="http://catalog-psidi.herokuapp.com/products/"+ productId;
+    
 	client
 		.query('SELECT * FROM "Products"."Products" WHERE "productId" = ' + productId)
 		.then((docs) => {
       docs.rows.sort(function(a, b) {
       return (a.publishingdate < b.publishingdate) ? -1 : ((a.publishingdate > b.publishingdate) ? 1 : 0);
       });
-    var items = [];
-    var products = [];
-    var rating = [];
-    for (i = 0; i < docs.rows.length; i++) {
-        var links_temp = new Object;
-        var itemref = new Object;
-        itemref.href="http://catalog-psidi.herokuapp.com/products" + docs.rows[i].id;
-        items.push(itemref)
 
-        links_temp.self = new Object;
-        links_temp.product = new Object;
-        links_temp.productName = new Object;
-        links_temp.productDescription = new Object;
-        links_temp.productBrand = new Object;
-        links_temp.productBarcode = new Object;
-        links_temp.price = new Object;
-        links_temp.productRating = new Object;
-        links_temp.nr_Reviews= new Object;
+      var _links_reviews = new Object;
+      var _links_rating = new Object;
+      var reviews=new Object;
+      var rating=new Object;
 
-        links_temp.self.href = "http://catalog-psidi.herokuapp.com/products/" + docs.rows[i].id;
-        links_temp.product.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].objectid;
-        links_temp.productName.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productName;
-        links_temp.productBrand.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productBrand;
-        links_temp.productBarcode.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productBarcode;
-        links_temp.price.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].price;
-        links_temp.productRating.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productRating;
-        links_temp.nr_Reviews.href= "http://catalog-psidi.herokuapp.com/product/1" + docs.rows[i].nr_Reviews;
-        products.push(links_temp);
-    }
-    links.items = items;
-    var size = docs.rows.length;
-    embedded.products = products;
+      _links_reviews.self=new Object;
+      _links_rating.self=new Object;
+
+    _links_reviews.self.href="http://reviews-psidi.herokuapp.com/reviews?productId="+docs.rows[0].productId;
+    _links_rating.self.href="http:/catalog-psidi.herokuapp.com/products/"+docs.rows[0].productId+"/rating";
+
+    reviews._links=_links_reviews;
+    rating._links=_links_rating;
+
+    embedded.reviews = reviews;
     embedded.rating = rating;
+
     res.status(200).json({
     "_links": links,
-    "size": size,
-    "_embedded": embedded
+    "_embedded": embedded,
+    "productId": docs.rows[0].productId,
+    "productName":docs.rows[0].productName,
+    "productBrand ":docs.rows[0].productBrand,
+    "price":docs.rows[0].price,
+    "productBarcode":docs.rows[0].productBarcode,
+    "nr_Reviews":docs.rows[0].nr_Reviews
     })
   })
 		.catch((e) => console.error(e.stack));
@@ -186,73 +148,27 @@ exports.products_get_product_by_id = (req, res, next) => {
 exports.products_rating_product = (req, res, next) => {
 	var productId = req.params.productId;
   var embedded = new Object;
+  var links = new Object;
 
   if(productId != undefined){
 
     links.self=new Object;
     links.product=new Object;
 
-    links.self.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId +"?rating="+ productRating;
-    links.product.href="http://catalog-psidi.herokuapp.com/products?productId=" + productId + "&page=1";
+    links.self.href="http://catalog-psidi.herokuapp.com/products/" + productId +"/rating";
+    links.product.href="http://catalog-psidi.herokuapp.com/products/" + productId;
     }
 
   client
     .query('SELECT * FROM "Products"."Products" WHERE "productId" = ' + productId)
-    .then((docs) =>{
- docs.rows.sort(function(a, b) {
-      return (a.publishingdate < b.publishingdate) ? -1 : ((a.publishingdate > b.publishingdate) ? 1 : 0);
-      });
-    var items = [];
-    var reviews = [];
-    for (i = 0; i < docs.rows.length; i++) {
-        var links_temp = new Object;
-        var itemref = new Object;
-        itemref.href="http://catalog-psidi.herokuapp.com/products" + docs.rows[i].id;
-        items.push(itemref)
-
-        links_temp.self = new Object;
-        links_temp.product = new Object;
-        links_temp.productName = new Object;
-        links_temp.productRating = new Object;
-        links_temp.nr_Reviews= new Object;
-
-        links_temp.self.href = "http://catalog-psidi.herokuapp.com/products/" + docs.rows[i].id;
-        links_temp.product.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].objectid;
-        links_temp.productName.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productName;
-        links_temp.productRating.href = "http://catalog-psidi.herokuapp.com/product/" + docs.rows[i].productRating;
-        links_temp.nr_Reviews.href= "http://catalog-psidi.herokuapp.com/product/1" + docs.rows[i].nr_Reviews;
-        products.push(links_temp);
-    }
-    links.items = items;
-    var size = docs.rows.length;
-    embedded.reviews = reviews;
+    .then((docs) =>{  
     res.status(200).json({
-    "rating": docs.rows[0].productRating,
     "_links": links,
-    "size": size,
-    "_embedded": embedded
+    "rating": docs.rows[0].productRating
     })
 })   
     .catch(e => console.error(e.stack))
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Updates the score of the Reviews:
 exports.products_score_update = (req, res, next) => {
@@ -287,39 +203,25 @@ exports.products_score_update = (req, res, next) => {
 		.catch((e) => console.error(e.stack));
 };
 
-/* 
-exports.products_update_product = (req, res, next) => {
 
- 
-  
-  var id= req.params.productId;
-  const queryObject = url.parse(req.url, true).query;
-  const productId = queryObject.productId;
-  const productName = queryObject.productName;
-  const productBrand = queryObject.productBrand;
-  const productBarcode = queryObject.productBarcode;
-  const price = queryObject.price;
-  const productRating = queryObject.productRating;
-  const nr_Reviews = queryObject.nr_Reviews;
-  client
-  .query('SELECT "Products" FROM "Products"."Products" WHERE "productId" = '+id)
-  .then(docs => updateProduct(docs.rows,review))
-  .catch(e => console.error(e.stack))
+exports.get_routes = (req, res, next) => {
+    var links = new Object;
 
+
+    links.search = new Object;
+    links.rating = new Object;
+    links.list = new Object;
+
+
+    links.search.href = "http://catalog-psidi.herokuapp.com/products/{:id}";
+    links.rating.href = "http://catalog-psidi.herokuapp.com/products/{:id}/rating";
+    links.list.href = "http://catalog-psidi.herokuapp.com/products";
+
+
+    res.status(200).json({
+        "_links": links
+    });
 }
 
 
-exports.products_create_product=(req,res,next)=>{
-  
 
-  client
-  .query("INSERT INTO Products.Products (status, score, reviewDescription, publishingDate, funnyFact) VALUES ('pending', '" + req.body.score + "', '" + req.body.productDescription + "', '" + getDate() + "', 'default')",
-      (err, res) => {
-          client.end();
-      }
-  )
-  .catch(e => console.error(e.stack + "teste")) 
-  ;
-
-}
-*/
