@@ -124,7 +124,7 @@ exports.products_get_product_by_id = (req, res, next) => {
     "_embedded": embedded,
     "productId": docs.rows[0].productId,
     "productName":docs.rows[0].productName,
-    "productBrand ":docs.rows[0].productBrand,
+    "productBrand":docs.rows[0].productBrand,
     "price":docs.rows[0].price,
     "productBarcode":docs.rows[0].productBarcode,
     "nr_Reviews":docs.rows[0].nr_Reviews
