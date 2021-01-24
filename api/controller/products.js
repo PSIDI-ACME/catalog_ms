@@ -155,11 +155,12 @@ exports.products_get_product_by_id = (req, res, next) => {
     var size = docs.rows.length;
     embedded.reviews = reviews;
     embedded.rating = rating;
-    res.status(200).json(docs.rows)
+    res.status(200).json({
     "_links": links,
     "size": size,
     "_embedded": embedded
     })
+  })
 		.catch((e) => console.error(e.stack));
 };
 
@@ -218,11 +219,11 @@ http://catalog-psidi.herokuapp.com/products/{:Id}/rating
     var size = docs.rows.length;
     embedded.reviews = reviews;
     res.status(200).json({
-    "rating": docs.rows[0].productRating
-    })
+    "rating": docs.rows[0].productRating,
     "_links": links,
     "size": size,
     "_embedded": embedded
+    })
 })   
     .catch(e => console.error(e.stack))
 };
