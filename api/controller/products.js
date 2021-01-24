@@ -130,7 +130,7 @@ exports.products_get_product_by_id = (req, res, next) => {
       return (a.publishingdate < b.publishingdate) ? -1 : ((a.publishingdate > b.publishingdate) ? 1 : 0);
       });
     var items = [];
-    var reviews = [];
+    var products = [];
     for (i = 0; i < docs.rows.length; i++) {
         var links_temp = new Object;
         var itemref = new Object;
